@@ -18,6 +18,8 @@ from matchpredictor.teams.teams_api import teams_api
 from matchpredictor.teams.teams_provider import TeamsProvider
 from matchpredictor.upcominggames.football_data_api_client import FootballDataApiClient
 from matchpredictor.upcominggames.upcoming_games_api import upcoming_games_api
+from matchpredictor.predictors.alphabet_predictor import AlphabetPredictor
+from matchpredictor.predictors.new_predictor import train_new_predictor
 
 
 def build_model_provider(training_data: List[Result]) -> ModelProvider:
@@ -29,7 +31,9 @@ def build_model_provider(training_data: List[Result]) -> ModelProvider:
         Model("Full simulator (fast)", train_offense_and_defense_predictor(training_data, 1_000)),
         Model("Full simulator", train_offense_and_defense_predictor(training_data, 10_000)),
         # The linear regression model uses scikit learn, so can cause issues on some machines
-        # Model("Linear regression", train_regression_predictor(training_data))
+        Model("Linear regression", train_regression_predictor(training_data)),
+        Model("Alphabet", AlphabetPredictor()),
+        Model("New Predictor", train_new_predictor(training_data)),
     ])
 
 
